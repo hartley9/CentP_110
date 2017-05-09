@@ -6,22 +6,8 @@
 
 #define DELAY 80000
 
-int main(int argc, char *argv[])
-{
-	int cent_x = 0, cent_y = 0, play_x = 0, play_y = 0, play_init = 0;
-	int delay = 80000;
-	int max_y = 0, max_x = 0;
-	int next_x_centP = 0;
-	int next_x_playr = 0;
-	int direction = 1;
-	char catPill[] = "OOOOOOOOOO";
-	char player[] = "W";
+void startScreen(){
 	
-
-	initscr();
-	curs_set(FALSE);
-	
-	//Checks to see if terminal supports color
 	if(has_colors() == FALSE)
 	{
 		endwin();
@@ -40,8 +26,37 @@ int main(int argc, char *argv[])
 	getch(); //Waits for user to press a key
 	clear(); //Clears the screen
 	
-	//move(0,0);
-	//printw("It works");
+	}
+
+void centipede_movement(int cent_x, int cent_y, int delay, int max_x, int max_y,
+						int next_x_centP, int direction, char catPill){
+	
+		
+	
+	}
+
+
+int main(int argc, char *argv[])
+{
+	int cent_x = 0, cent_y = 0, play_x = 0, play_y = 0, play_init = 0;
+	int delay = 80000;
+	int max_y = 0, max_x = 0;
+	int next_x_centP = 0;
+	int next_x_playr = 0;
+	int direction = 1;
+	char catPill[] = "OOOOOOOOOO";
+	char player[] = "W";
+	
+
+	initscr();
+	curs_set(FALSE);
+	keypad(stdscr, TRUE);
+	
+	startScreen();
+	
+	
+	
+
 	
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	attron(COLOR_PAIR(1));
@@ -54,15 +69,8 @@ int main(int argc, char *argv[])
 		getmaxyx(stdscr, max_y, max_x);
 		
 		
-		clear();
 		mvprintw(cent_y, cent_x, catPill);
 		
-		
-		if (play_init==0)
-		{
-			mvprintw((max_y-(max_y/3)), (max_x/2), player);
-			play_init++;
-		}
 		
 		mvprintw(play_y, play_x, player);
 		
@@ -82,22 +90,24 @@ int main(int argc, char *argv[])
 			cent_x += direction;
 			}
 		
-		
 		//next_x_playr = play
 		//Key presses
 		int playerMove;
-		halfdelay(1);
+		halfdelay(1); 
 		int ch;
 		ch = getch();
-		if(ch == KEY_LEFT){	
-			/**
-			if (next_x_playr >= (max_x - strlen(player)) || next_x_playr < 0)
+		if(ch == KEY_UP)
+		{	
+			
+			if (next_x_playr >= (max_y - strlen(player)) || next_x_playr < 0)
 			{}
-			else{play_y = play_y - 5;}**/
-			play_y = play_y - 5;
-		}
+			else{play_y = play_y - 0.25;}
 			
 		}
+		
+		clear();
+			
+	}
 				
 		cbreak(); //Close window when ctrl + c is pressed
 	
