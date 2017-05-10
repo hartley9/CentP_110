@@ -35,7 +35,7 @@ void startScreen(){
 
 int main(int argc, char *argv[])
 {
-	int cent_x = 0, cent_y = 0, play_x = 0, play_y = 0, play_init = 0;
+	int cent_x = 0, cent_y = 0, player_x = 0, player_y = 0, play_init = 0;
 	int delay = 80000;
 	int max_y = 0, max_x = 0;
 	int next_x_centP = 0;
@@ -61,8 +61,8 @@ int main(int argc, char *argv[])
 	attron(COLOR_PAIR(1));
 	
 	getmaxyx(stdscr, max_y, max_x);
-	play_x = max_x/2;
-	play_y = max_y-(max_y/3);
+	player_x = max_x/2;
+	player_y = max_y-(max_y/3);
 	while(1)
 	{
 		getmaxyx(stdscr, max_y, max_x);
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 		mvprintw(cent_y, cent_x, catPill);
 		
 		
-		mvprintw(play_y, play_x, player);
+		mvprintw(player_y, player_x, player);
 		
 		refresh();
 		
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 		
 		next_x_centP = cent_x + cent_direction;
 		
-		next_y_playr = play_y + player_direction;
+		
 		
 		if (next_x_centP >= (max_x - strlen(catPill)) || next_x_centP < 0)
 			{
@@ -101,17 +101,28 @@ int main(int argc, char *argv[])
 		switch(ch)
 		{
 			case KEY_UP:
-				if ((play_y - 2) <= 0)
-				{play_y = play_y + 0.25;}
-				else{play_y = play_y - 0.25; player_direction *= -1; addch('x');}
+				if ((player_y - 2) <= 0)
+				{player_y = player_y + 0.25;}
+				else{player_y -= 1; player_direction *= -1;}
 				break;
 			
 			case KEY_DOWN:
-				if ((play_y + 2) > max_y)
-				{play_y = play_y - 1;}
-				else{play_y = play_y + 1; player_direction = 1;}
+				if ((player_y + 2) > max_y)
+				{player_y = player_y - 1;}
+				else{player_y += 1; player_direction = 1;}
 				break;
 				
+			case KEY_RIGHT:
+				if ((player_x + 2) > max_x)
+				{player_x -= 2;}
+				else {player_x += 1;}
+				break;
+				
+			case KEY_LEFT:
+				if ((player_x -2) <= 0)
+				{player_x += 1;}
+				else {player_x -= 1;}
+				break;
 				
 		}
 	
