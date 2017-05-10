@@ -101,14 +101,14 @@ int main(int argc, char *argv[])
 		switch(ch)
 		{
 			case KEY_UP:
-				if (next_y_playr >= (max_y - strlen(player)) || next_y_playr < 0)
-				{}
+				if ((play_y - 2) <= 0)
+				{play_y = play_y + 0.25;}
 				else{play_y = play_y - 0.25; player_direction *= -1; addch('x');}
 				break;
 			
 			case KEY_DOWN:
-				if (next_y_playr >= (max_y - strlen(player)) || next_y_playr < 0)
-				{}
+				if ((play_y + 2) > max_y)
+				{play_y = play_y - 1;}
 				else{play_y = play_y + 1; player_direction = 1;}
 				break;
 				
