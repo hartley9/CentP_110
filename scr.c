@@ -3,8 +3,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define DELAY 80000
+#define MAX_BULLETS 100
 
 void startScreen(){
 	
@@ -30,29 +32,67 @@ void startScreen(){
 	
 	}
 
+void displayScore()
+{
+	mvprintw(0,0,"Score: ");
+	
+}
 
+
+int add_bullet(int player_x, int player_y){
+	
+	int bullet_x, bullet_y;
+	
+	bullet_x = player_x - 5;
+	bullet_y = player_y - 5;
+	
+	
+	mvprintw(bullet_x, bullet_y, "|");
+	
+	
+	//bullet_present = TRUE;
+	
+	return bullet_x;
+	return bullet_y;
+//	return bullet_present;
+	
+	}
+
+/*
+void update_bullet(){
+	
+	bullet_x -= 1;
+	bullet_y -= 1;
+	
+	}
+	**/
 
 
 int main(int argc, char *argv[])
 {
-	int cent_x = 0, cent_y = 0, player_x = 0, player_y = 0, play_init = 0;
+	int cent_x = 0, cent_y = 2, player_x = 0, player_y = 0, play_init = 0;
 	int delay = 80000;
 	int max_y = 0, max_x = 0;
+	
 	int next_x_centP = 0;
+	int cent_direction = 1;
+	
 	int next_x_playr = 0;
 	int next_y_playr = 0;
-	int cent_direction = 1;
+	
+	int bullet_x = player_x - 1;
+	int bullet_y = player_y - 1;
+
 	int player_direction = 1;
+	int score = 0;
 	char catPill[] = "OOOOOOOOOO";
 	char player[] = "W";
-	
 
 	initscr();
 	curs_set(FALSE);
 	keypad(stdscr, TRUE);
 	
 	startScreen();
-	
 	
 	
 
@@ -62,16 +102,21 @@ int main(int argc, char *argv[])
 	
 	getmaxyx(stdscr, max_y, max_x);
 	player_x = max_x/2;
-	player_y = max_y-(max_y/3);
+	player_y = max_y-5;
 	while(1)
 	{
 		getmaxyx(stdscr, max_y, max_x);
 		
+		displayScore();
 		
 		mvprintw(cent_y, cent_x, catPill);
 		
-		
 		mvprintw(player_y, player_x, player);
+		
+		
+		
+		
+		//update_bullet();
 		
 		refresh();
 		
@@ -100,17 +145,6 @@ int main(int argc, char *argv[])
 		ch = getch();
 		switch(ch)
 		{
-			case KEY_UP:
-				if ((player_y - 2) <= 0)
-				{player_y = player_y + 0.25;}
-				else{player_y -= 1; player_direction *= -1;}
-				break;
-			
-			case KEY_DOWN:
-				if ((player_y + 2) > max_y)
-				{player_y = player_y - 1;}
-				else{player_y += 1; player_direction = 1;}
-				break;
 				
 			case KEY_RIGHT:
 				if ((player_x + 2) > max_x)
@@ -124,14 +158,15 @@ int main(int argc, char *argv[])
 				else {player_x -= 1;}
 				break;
 				
+			case KEY_UP:
+				//add_bullet(bullet_x, bullet_y, bullet_present);
+				break;
 		}
 	
 	/*	if(ch == KEY_UP)
 		{	
 			
-			if (next_x_playr >= (max_y - strlen(player)) || next_x_playr < 0)
-			{}
-			else{play_y = play_y - 0.25;}
+			fire();
 			
 		}*/
 		
