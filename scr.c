@@ -85,22 +85,6 @@ int main(int argc, char *argv[])
 	
 	int max_y = 0, max_x = 0;
 
-	int score_size = 3;
-	initscr();
-	noecho();
-	curs_set(FALSE);
-	getmaxyx(stdscr, max_y, max_x);
-
-	WINDOW *field = newwin((max_y - score_size), max_x, 0, 0);
-	WINDOW *score = newwin((max_y - score_size), max_x, 0, 0);
-
-	mvwprintw(field, 0, 0, "Field");
-	mvwprintw(score, 0, 0, "Score");
-	wrefresh(field);
-	wrefresh(score);
-	sleep(5);
-
-
 	int bullet_x = player_x - 1;
 	int bullet_y = player_y - 1;
 
