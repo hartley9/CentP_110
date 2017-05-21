@@ -3,11 +3,35 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 #define DELAY 80000
 #define MAX_BULLETS 100
 
+char catPill[] = "OOOOOOOOOO";
+char player[] = "W";
+
+int cent_x = 0, cent_y = 2, player_x = 0, player_y = 0, play_init = 0;
+int delay = 80000;
+int max_y = 0, max_x = 0;
+
+int next_x_centP = 0;
+int cent_direction = 1;
+	
+int next_x_playr = 0;
+int next_y_playr = 0;
+	
+int bullet_x = player_x - 1;
+int bullet_y = player_y - 1;
+	
+char bullet_array [10];
+	
+	int b = 0;
+	char current_bullet;
+
+	int player_direction = 1;
+	int score = 0;
+
+//Contains all the code for the start screen of the game
 void startScreen(){
 	
 	if(has_colors() == FALSE)
@@ -32,61 +56,53 @@ void startScreen(){
 	
 	}
 
-void displayScore()
+//Displays and updates the score of the game
+void displayScore(int score)
+
+
 {
-	mvprintw(0,0,"Score: ");
+	mvprintw(0,0,"Score: %d", score);
 	
 }
 
+//Contains all the code responsible for the movement of the centipede	
+int moveCentipede(char *catPill, int cent_y, int cent_x, int next_x_centP, int max_y, int max_x, int cent_direction)
+{
+	
+	
+	mvprintw(cent_y, cent_x, catPill);
+	
+	if (next_x_centP >= (max_x - strlen(catPill)) || next_x_centP < 0)
+			{
+			cent_direction *= -1;
+			cent_y++;
+			}
+		else 
+			{
+			cent_x += cent_direction;
+			}
+	return cent_y, cent_x, next_x_centP, max_y, max_x, cent_direction;		
+	
+}
 
-int add_bullet(int player_x, int player_y){
-	
-	int bullet_x, bullet_y;
-	
-	bullet_x = player_x - 5;
-	bullet_y = player_y - 5;
-	
-	
-	mvprintw(bullet_x, bullet_y, "|");
-	
-	
-	//bullet_present = TRUE;
-	
-	return bullet_x;
-	return bullet_y;
-//	return bullet_present;
-	
+//initialises the array holding the bullets
+void init_bullet_array(char *bullet_array)
+{
+	for (int i=0; i<10; i++)
+	{
+		bullet_array[i] = '|';
 	}
+}
 
-/*
-void update_bullet(){
-	
-	bullet_x -= 1;
-	bullet_y -= 1;
-	
-	}
-	**/
+
 
 
 int main(int argc, char *argv[])
 {
-	int cent_x = 0, cent_y = 2, player_x = 0, player_y = 0, play_init = 0;
-	int delay = 80000;
-	int max_y = 0, max_x = 0;
 	
-	int next_x_centP = 0;
-	int cent_direction = 1;
 	
-	int next_x_playr = 0;
-	int next_y_playr = 0;
 	
-	int bullet_x = player_x - 1;
-	int bullet_y = player_y - 1;
-
-	int player_direction = 1;
-	int score = 0;
-	char catPill[] = "OOOOOOOOOO";
-	char player[] = "W";
+	
 
 	initscr();
 	curs_set(FALSE);
@@ -94,8 +110,7 @@ int main(int argc, char *argv[])
 	
 	startScreen();
 	
-	
-
+	init_bullet_array(bullet_array);
 	
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	attron(COLOR_PAIR(1));
@@ -107,7 +122,7 @@ int main(int argc, char *argv[])
 	{
 		getmaxyx(stdscr, max_y, max_x);
 		
-		displayScore();
+		displayScore(score);
 		
 		mvprintw(cent_y, cent_x, catPill);
 		
@@ -125,7 +140,6 @@ int main(int argc, char *argv[])
 		next_x_centP = cent_x + cent_direction;
 		
 		
-		
 		if (next_x_centP >= (max_x - strlen(catPill)) || next_x_centP < 0)
 			{
 			cent_direction *= -1;
@@ -135,6 +149,9 @@ int main(int argc, char *argv[])
 			{
 			cent_x += cent_direction;
 			}
+			
+			
+		//moveCentipede(catPill, cent_y, cent_x, next_x_centP, max_y, max_x, cent_direction);	
 		
 		//next_x_playr = play
 		//Key presses
@@ -158,8 +175,12 @@ int main(int argc, char *argv[])
 				else {player_x -= 1;}
 				break;
 				
-			case KEY_UP:
-				//add_bullet(bullet_x, bullet_y, bullet_present);
+			case KEY_UP :
+				if (b >= 10){break;}
+				current_bullet = bullet_array[b];
+				//mvprintw((player_x - 1), (player_y -1), current_bullet);
+				b++;
+				
 				break;
 		}
 	
