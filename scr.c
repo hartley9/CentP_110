@@ -7,29 +7,9 @@
 #define DELAY 80000
 #define MAX_BULLETS 100
 
-char catPill[] = "OOOOOOOOOO";
-char player[] = "W";
 
-int cent_x = 0, cent_y = 2, player_x = 0, player_y = 0, play_init = 0;
-int delay = 80000;
-int max_y = 0, max_x = 0;
 
-int next_x_centP = 0;
-int cent_direction = 1;
-	
-int next_x_playr = 0;
-int next_y_playr = 0;
-	
-int bullet_x = player_x - 1;
-int bullet_y = player_y - 1;
-	
-char bullet_array [10];
-	
-	int b = 0;
-	char current_bullet;
-
-	int player_direction = 1;
-	int score = 0;
+//int score = 0;
 
 //Contains all the code for the start screen of the game
 void startScreen(){
@@ -57,6 +37,7 @@ void startScreen(){
 	}
 
 //Displays and updates the score of the game
+/*
 void displayScore(int score)
 
 
@@ -64,26 +45,9 @@ void displayScore(int score)
 	mvprintw(0,0,"Score: %d", score);
 	
 }
+**/
 
 //Contains all the code responsible for the movement of the centipede	
-int moveCentipede(char *catPill, int cent_y, int cent_x, int next_x_centP, int max_y, int max_x, int cent_direction)
-{
-	
-	
-	mvprintw(cent_y, cent_x, catPill);
-	
-	if (next_x_centP >= (max_x - strlen(catPill)) || next_x_centP < 0)
-			{
-			cent_direction *= -1;
-			cent_y++;
-			}
-		else 
-			{
-			cent_x += cent_direction;
-			}
-	return cent_y, cent_x, next_x_centP, max_y, max_x, cent_direction;		
-	
-}
 
 //initialises the array holding the bullets
 void init_bullet_array(char *bullet_array)
@@ -98,13 +62,49 @@ void init_bullet_array(char *bullet_array)
 
 
 int main(int argc, char *argv[])
-{
-	
-	
-	
-	
 
+{
+	char catPill[] = "OOOOOOOOOO";
+	char player[] = "W";
+
+	int cent_x = 0, cent_y = 2, player_x = 0, player_y = 0, play_init = 0;
+	int delay = 80000;
+
+	int next_x_centP = 0;
+	int cent_direction = 1;
+		
+	int next_x_playr = 0;
+	int next_y_playr = 0;
+		
+	char bullet_array [10];
+		
+	int b = 0;
+	char current_bullet;
+
+	int player_direction = 1;
+	
+	int max_y = 0, max_x = 0;
+
+	int score_size = 3;
 	initscr();
+	noecho();
+	curs_set(FALSE);
+	getmaxyx(stdscr, max_y, max_x);
+
+	WINDOW *field = newwin((max_y - score_size), max_x, 0, 0);
+	WINDOW *score = newwin((max_y - score_size), max_x, 0, 0);
+
+	mvwprintw(field, 0, 0, "Field");
+	mvwprintw(score, 0, 0, "Score");
+	wrefresh(field);
+	wrefresh(score);
+	sleep(5);
+
+
+	int bullet_x = player_x - 1;
+	int bullet_y = player_y - 1;
+
+	
 	curs_set(FALSE);
 	keypad(stdscr, TRUE);
 	
@@ -114,22 +114,22 @@ int main(int argc, char *argv[])
 	
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	attron(COLOR_PAIR(1));
+
+
+	//score_window = newwin(1, (max_x/2), 0,0);
 	
-	getmaxyx(stdscr, max_y, max_x);
+	
 	player_x = max_x/2;
 	player_y = max_y-5;
 	while(1)
 	{
 		getmaxyx(stdscr, max_y, max_x);
 		
-		displayScore(score);
+		//displayScore(score);
 		
 		mvprintw(cent_y, cent_x, catPill);
 		
 		mvprintw(player_y, player_x, player);
-		
-		
-		
 		
 		//update_bullet();
 		
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 			case KEY_UP :
 				if (b >= 10){break;}
 				current_bullet = bullet_array[b];
-				//mvprintw((player_x - 1), (player_y -1), current_bullet);
+				mvprintw((player_x - 1), (player_y -1), &current_bullet);
 				b++;
 				
 				break;
@@ -198,7 +198,8 @@ int main(int argc, char *argv[])
 		cbreak(); //Close window when ctrl + c is pressed
 	
 
-	
+	delwin(field);
+	delwin(score);
 	getch();
 	endwin();	
 	return 0;
