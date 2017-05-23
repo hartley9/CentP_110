@@ -26,20 +26,17 @@ char bullet_array [] = {'|', '|', '|', '|', '|', '|', '|', '|', '|', '|'};
 int bullet_array_initialised = 0;
 int bullet_x[10] = {}; 
 int bullet_y[10] = {};
+int b = 0; //Used as a counter for the number of bullets present
+
+int player_direction = 1;
+int score = 0;
+
 void init_bullet_position(){
   for (int i = 0; i < sizeof(bullet_y); ++i)
   {
     bullet_y[i] = player_y;
   }
 }
-  
-int b = 0; //Used as a counter for the number of bullets present
-char bull;
-
-int player_direction = 1;
-int score = 0;
-
-
 
 //Contains all the code for the start screen of the game
 void startScreen(){
@@ -154,7 +151,7 @@ int main(int argc, char *argv[])
     if (next_x_cent >= (max_x - strlen(centipede)) || next_x_cent < 0)
       {
       
-        
+        //When the centipede reaches the end of the screen this reverts the diretion
         cent_direction *= -1;
         cent_y++;
       }
@@ -163,6 +160,7 @@ int main(int argc, char *argv[])
       cent_x += cent_direction;
       }
       
+    //Delay so if a button is not pressed game execution does not stop
     halfdelay(2); 
     int ch;
     int c;
@@ -171,13 +169,13 @@ int main(int argc, char *argv[])
     {
         
       case KEY_RIGHT:
-        if ((player_x + 2) > max_x)
+        if ((player_x + 2) > max_x) //If the player ship reaches the right bounds of the screen
         {player_x -= 2;}
         else {player_x += 1;}
         break;
         
       case KEY_LEFT:
-        if ((player_x -2) <= 0)
+        if ((player_x -2) <= 0) //If the player ship reaches the left bound of the screen
         {player_x += 1;}
         else {player_x -= 1;}
         break;
@@ -187,7 +185,7 @@ int main(int argc, char *argv[])
         break;
     }
 
-    
+    //Clears all elements on the screen
     clear();
       
   }
