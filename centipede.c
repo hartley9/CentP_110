@@ -22,10 +22,10 @@ int cent_direction = 1;
 int next_x_playr = 0;
 int next_y_playr = 0;
   
-char bullet_array [] = {'|', '|', '|', '|', '|', '|', '|', '|', '|', '|'};
-int bullet_array_initialised = 0;
-int bullet_x[10] = {}; 
-int bullet_y[10] = {};
+char bullet_array [] = {'|', '*', '|', '|', '|', '|', '|', '|', '|', '|'};
+int bullet_array_initialised = 0;  //Allows for the one time initialisation of 
+int bullet_x[10] = {};             //bullet_x and bullet_y arrays               
+int bullet_y[10] = {};  
 int b = 0; //Used as a counter for the number of bullets present
 
 int player_direction = 1;
@@ -66,22 +66,11 @@ void startScreen(){
 
 //Displays and updates the score of the game
 void displayScore(int score)
-
 {
+  score = 0;
   mvprintw(0,0,"Score: %d", score);
   
 }
-
-/*
-//initialises the array holding the bullets
-void init_bullet_array(char *bullet_array)
-{
-  for (int i=0; i<10; i++)
-  {
-    bullet_array[i] = '|';
-  }
-}
-**/
 
 int main(int argc, char *argv[])
 { 
@@ -115,11 +104,10 @@ int main(int argc, char *argv[])
       init_bullet_position();
     }
 
-    if (b>0){
+    if (b>=0){ //Code will only execute if bullets have been fired
       int i;
-      for (i=0;i<=b;i++){
-        bullet_y[i] = bullet_y[i] - 1;
-      }
+      bullet_x[b] = player_x;
+      bullet_y[b] = player_y -1;
 
       for (i=0; i<=b; i++){
         mvprintw(bullet_y[b], bullet_x[b], &bullet_array[b]);
@@ -127,7 +115,7 @@ int main(int argc, char *argv[])
     }
 
 
-
+    //Returns dimensions of window, placed inside while loop so window can be resized during execution
     getmaxyx(stdscr, max_y, max_x);
     
     //Displays the score on screen
@@ -171,13 +159,13 @@ int main(int argc, char *argv[])
       case KEY_RIGHT:
         if ((player_x + 2) > max_x) //If the player ship reaches the right bounds of the screen
         {player_x -= 2;}
-        else {player_x += 1;}
+        else {player_x += 3;}
         break;
         
       case KEY_LEFT:
         if ((player_x -2) <= 0) //If the player ship reaches the left bound of the screen
         {player_x += 1;}
-        else {player_x -= 1;}
+        else {player_x -= 3;}
         break;
         
       case KEY_UP:
@@ -190,6 +178,7 @@ int main(int argc, char *argv[])
       
   }
   
+  //Ensures bullet_x and bullet_y values are initialised and not overwritten
   bullet_array_initialised += 1;
 
   cbreak(); //Close window when ctrl + c is pressed
