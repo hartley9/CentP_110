@@ -16,16 +16,16 @@ int cent_x = 0, cent_y = 2, player_x = 0, player_y = 0, play_init = 0;
 int delay = 80000;
 int max_y = 0, max_x = 0;
 
-int next_x_cent = 0;
+int next_x_cent = 0; //Variable which holds the next x coordinate value to the centipede
 int cent_direction = 1;
   
 int next_x_playr = 0;
 int next_y_playr = 0;
   
-char bullet_array [] = {'|', '*', '|', '|', '|', '|', '|', '|', '|', '|'};
+char bullet_array [] = {'|', '|', '|', '|', '|', '|', '|', '|', '|', '|'};
 int bullet_array_initialised = 0;  //Allows for the one time initialisation of 
-int bullet_x[10] = {};             //bullet_x and bullet_y arrays               
-int bullet_y[10] = {};  
+int bullet_x[] = {0,0,0,0,0,0,0,0,0,0};             //bullet_x and bullet_y arrays               
+int bullet_y[] = {0,0,0,0,0,0,0,0,0,0};  
 int b = 0; //Used as a counter for the number of bullets present
 
 int player_direction = 1;
@@ -53,9 +53,17 @@ void startScreen(){
   
   init_pair(1, COLOR_CYAN, COLOR_BLACK);
   attron(COLOR_PAIR(1));
+
+  
   printw("Welcome to Centipede!\n");
   printw("Version 1.0.0\n");
   printw("<--Press Any Key to Start-->");
+  printw("<--Press Any Key to Start-->\n");
+  printw("\n");
+  printw("Instructions: \n");
+  printw("Left Arrow: Move player left.\n");
+  printw("Right Arrow: Move player right.\n");
+  printw("Up Arrow: Fire.\n");
   
   attroff(COLOR_PAIR(1));
   
@@ -101,7 +109,7 @@ int main(int argc, char *argv[])
 
 
     if (bullet_array_initialised<1){
-      init_bullet_position();
+     // init_bullet_position();
     }
 
     if (b>=0){ //Code will only execute if bullets have been fired
@@ -151,7 +159,7 @@ int main(int argc, char *argv[])
     //Delay so if a button is not pressed game execution does not stop
     halfdelay(2); 
     int ch;
-    int c;
+    //int c;
     ch = getch();
     switch(ch)
     {
