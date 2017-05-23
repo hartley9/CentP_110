@@ -24,11 +24,11 @@ int next_y_playr = 0;
   
 char bullet_array [] = {'|', '|', '|', '|', '|', '|', '|', '|', '|', '|'};
 int bullet_array_initialised = 0;  //Allows for the one time initialisation of 
-int bullet_x[] = {0,0,0,0,0,0,0,0,0,0};             //bullet_x and bullet_y arrays               
-int bullet_y[] = {0,0,0,0,0,0,0,0,0,0};  
+int bullet_x[] = {};             //bullet_x and bullet_y arrays               
+int bullet_y[] = {};  
 int b = 0; //Used as a counter for the number of bullets present
 
-int player_direction = 1;
+
 int score = 0;
 
 void init_bullet_position(){
@@ -54,7 +54,7 @@ void startScreen(){
   init_pair(1, COLOR_CYAN, COLOR_BLACK);
   attron(COLOR_PAIR(1));
 
-  
+
   printw("Welcome to Centipede!\n");
   printw("Version 1.0.0\n");
   printw("<--Press Any Key to Start-->");
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 
 
     if (bullet_array_initialised<1){
-     // init_bullet_position();
+      init_bullet_position();
     }
 
     if (b>=0){ //Code will only execute if bullets have been fired
