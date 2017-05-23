@@ -16,23 +16,27 @@ int cent_x = 0, cent_y = 2, player_x = 0, player_y = 0, play_init = 0;
 int delay = 80000;
 int max_y = 0, max_x = 0;
 
-int next_x_cent = 0;
+int next_x_cent = 0; //Variable which holds the next x coordinate value to the centipede
 int cent_direction = 1;
   
 int next_x_playr = 0;
 int next_y_playr = 0;
   
 char bullet_array [] = {'|', '|', '|', '|', '|', '|', '|', '|', '|', '|'};
-int bullet_position[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
-int bullet_x, bullet_y;
-  
+int bullet_array_initialised = 0;  //Allows for the one time initialisation of 
+int bullet_x[] = {0,0,0,0,0,0,0,0,0,0};             //bullet_x and bullet_y arrays               
+int bullet_y[] = {0,0,0,0,0,0,0,0,0,0};  
 int b = 0; //Used as a counter for the number of bullets present
-char bull;
 
 int player_direction = 1;
 int score = 0;
 
-
+void init_bullet_position(){
+  for (int i = 0; i < sizeof(bullet_y); ++i)
+  {
+    bullet_y[i] = player_y;
+  }
+}
 
 //Contains all the code for the start screen of the game
 void startScreen(){
@@ -61,23 +65,12 @@ void startScreen(){
   }
 
 //Displays and updates the score of the game
-void displayScore(int b)
-
+void displayScore(int score)
 {
-  mvprintw(0,0,"Score: %d", b);
+  score = 0;
+  mvprintw(0,0,"Score: %d", score);
   
 }
-
-/*
-//initialises the array holding the bullets
-void init_bullet_array(char *bullet_array)
-{
-  for (int i=0; i<10; i++)
-  {
-    bullet_array[i] = '|';
-  }
-}
-**/
 
 int main(int argc, char *argv[])
 { 
@@ -95,21 +88,34 @@ int main(int argc, char *argv[])
   init_pair(1, COLOR_GREEN, COLOR_BLACK);
   attron(COLOR_PAIR(1));
   
+  //Function that returns the dimensions of the game window
   getmaxyx(stdscr, max_y, max_x);
+ 
   player_x = max_x/2;
   player_y = max_y-5;
+ 
   //Main game loop 
   int b = -1;
   while(1)
   {
 
-    if (b>0){
-      int i;
-      for (i=0;i>=b;i++){
 
+    if (bullet_array_initialised<1){
+     // init_bullet_position();
+    }
+
+    if (b>=0){ //Code will only execute if bullets have been fired
+      int i;
+      bullet_x[b] = player_x;
+      bullet_y[b] = player_y -1;
+
+      for (i=0; i<=b; i++){
+        mvprintw(bullet_y[b], bullet_x[b], &bullet_array[b]);
       }
     }
 
+
+    //Returns dimensions of window, placed inside while loop so window can be resized during execution
     getmaxyx(stdscr, max_y, max_x);
     
     //Displays the score on screen
@@ -120,11 +126,6 @@ int main(int argc, char *argv[])
 
     //Displays the player ship in the relevent place on the screen
     mvprintw(player_y, player_x, player);
-
-    bullet_x = player_x;
-        bullet_y = player_y -1;
-        bull = bullet_array[b];
-        mvprintw(bullet_y, bullet_x, &bull);
     
     //Updates all the elements present on screen
     refresh();
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
     if (next_x_cent >= (max_x - strlen(centipede)) || next_x_cent < 0)
       {
       
-        
+        //When the centipede reaches the end of the screen this reverts the diretion
         cent_direction *= -1;
         cent_y++;
       }
@@ -147,23 +148,24 @@ int main(int argc, char *argv[])
       cent_x += cent_direction;
       }
       
+    //Delay so if a button is not pressed game execution does not stop
     halfdelay(2); 
     int ch;
-    int c;
+    //int c;
     ch = getch();
     switch(ch)
     {
         
       case KEY_RIGHT:
-        if ((player_x + 2) > max_x)
+        if ((player_x + 2) > max_x) //If the player ship reaches the right bounds of the screen
         {player_x -= 2;}
-        else {player_x += 1;}
+        else {player_x += 3;}
         break;
         
       case KEY_LEFT:
-        if ((player_x -2) <= 0)
+        if ((player_x -2) <= 0) //If the player ship reaches the left bound of the screen
         {player_x += 1;}
-        else {player_x -= 1;}
+        else {player_x -= 3;}
         break;
         
       case KEY_UP:
@@ -171,15 +173,15 @@ int main(int argc, char *argv[])
         break;
     }
 
-    
+    //Clears all elements on the screen
     clear();
       
   }
-        
-    cbreak(); //Close window when ctrl + c is pressed
   
+  //Ensures bullet_x and bullet_y values are initialised and not overwritten
+  bullet_array_initialised += 1;
 
-  
+  cbreak(); //Close window when ctrl + c is pressed
   getch();
   endwin(); 
   return 0;
