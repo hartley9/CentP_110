@@ -34,7 +34,7 @@ int score = 0;
 void init_bullet_position(){
   for (int i = 0; i < sizeof(bullet_y); ++i)
   {
-    bullet_y[i] = player_y;
+    bullet_y[i] = player_y-1;
   }
 }
 
@@ -56,7 +56,7 @@ void startScreen(){
 
 
   printw("Welcome to Centipede!\n");
-  printw("Version 1.0.0\n");
+  printw("Version 1.x.x\n");
   printw("<--Press Any Key to Start-->");
   printw("<--Press Any Key to Start-->\n");
   printw("\n");
