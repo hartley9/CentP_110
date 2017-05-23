@@ -24,12 +24,12 @@ int next_y_playr = 0;
   
 char bullet_array [] = {'|', '|', '|', '|', '|', '|', '|', '|', '|', '|'};
 int bullet_array_initialised = 0;
-int bullet_position[10] = {}; 
-int bullet_x, bullet_y;
+int bullet_x[10] = {}; 
+int bullet_y[10] = {};
 void init_bullet_position(){
-  for (int i = 0; i < sizeof(bullet_position); ++i)
+  for (int i = 0; i < sizeof(bullet_y); ++i)
   {
-    bullet_position[i] = player_x;
+    bullet_y[i] = player_y;
   }
 }
   
@@ -113,23 +113,19 @@ int main(int argc, char *argv[])
   while(1)
   {
 
-    
-    bullet_y = player_y -1;
-    bull = bullet_array[b];
-    mvprintw(bullet_y, bullet_x, &bull);
 
     if (bullet_array_initialised<1){
-      init_bullet_position;
+      init_bullet_position();
     }
 
     if (b>0){
       int i;
       for (i=0;i<=b;i++){
-        bullet_position[i] = bullet_position[i] + b;
+        bullet_y[i] = bullet_y[i] - 1;
       }
 
       for (i=0; i<=b; i++){
-        mvprintw(bullet_position[b], bullet_x, &bullet_array[b]);
+        mvprintw(bullet_y[b], bullet_x[b], &bullet_array[b]);
       }
     }
 
@@ -145,11 +141,6 @@ int main(int argc, char *argv[])
 
     //Displays the player ship in the relevent place on the screen
     mvprintw(player_y, player_x, player);
-
-    bullet_x = player_x;
-    bullet_y = player_y -1;
-    bull = bullet_array[b];
-    mvprintw(bullet_y, bullet_x, &bull);
     
     //Updates all the elements present on screen
     refresh();
