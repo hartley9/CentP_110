@@ -4,10 +4,11 @@
 #include <string.h>
 
 #define MAX_BULLETS 100
+#define DELAY 80000
 
 
 void draw_borders(WINDOW *screen);
-char cent_pill[] = "0000000000";
+char centipede[] = "0000000000";
 char player[] = "W";
 
 int cent_x = 1;
@@ -52,6 +53,13 @@ int main(){
 
 	while(1){
 
+		clear();
+
+		wrefresh(field);
+		wrefresh(score);
+
+
+		getmaxyx(stdscr, max_y, max_x);
 		//mvwprintw(field, 1, 1, "Field");
 		mvwprintw(score, 1, 1, "Score");
 
@@ -59,15 +67,28 @@ int main(){
 		draw_borders(score);
 
 		//Adds the centipede to the window
-		mvwprintw(field, cent_y, cent_x, cent_pill);
+		mvwprintw(field, cent_y, cent_x, centipede);
 
 		//Adds the player ship to the window
-		mvwprintw(field, ((max_y/3)*2.5), (max_x/2), player);
+		mvwprintw(field, ((max_y/3)+13), (max_x/2), player);
 
+		//
+		usleep(DELAY);
+		refresh();
 
-		wrefresh(field);
-		wrefresh(score);
+		next_x_cent = cent_x + cent_direction;
+
+		if (next_x_cent >= (max_x - strlen(centipede)) || next_x_cent < 0 ){
+			cent_direction *= -1;
+			wrefresh(field);
+			cent_y++;
+		}
+		else{
+			cent_x += cent_direction;
+		}
+		
 	}
+	clear();
 
 	getch();	
 	delwin(field);
